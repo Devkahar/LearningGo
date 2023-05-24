@@ -29,4 +29,12 @@ func main() {
 	sort.Ints(highScores)
 	fmt.Println("Sorted ", highScores)
 
+	// how to remove a value form slices based on index
+
+	var courses = []string{"reactjs", "javascript", "swift", "nodejs", "ruby"}
+	fmt.Println(courses)
+	var index int = 2
+	courses = append(courses[:index], courses[index+1:]...)
+	fmt.Println(courses)
+
 }
