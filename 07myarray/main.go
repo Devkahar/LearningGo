@@ -12,10 +12,7 @@ func main() {
 	fmt.Println("Fruit List ", fruitList)
 	fmt.Println("Fruit List length ", len(fruitList))
 
-	var vegetableList [3]string
-	vegetableList[0] = "Onion"
-	vegetableList[1] = "Tomato"
-	vegetableList[2] = "Ginger"
+	var vegetableList []string = []string{"Onion", "Tomato", "Ginger"}
 
 	fmt.Println("Fruit List ", vegetableList)
 	fmt.Println("Fruit List length ", len(vegetableList))
