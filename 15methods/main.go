@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 	fmt.Println("Learning Methods in Go")
-	// no inh eritance in golang; No super or parent
+	// no inheritance in golang; No super or parent
 	dev := User{"Dev", "dev@gmail.com", true, 20}
 	fmt.Printf("Dev Details %+v", dev)
 	dev.GetStatus()
