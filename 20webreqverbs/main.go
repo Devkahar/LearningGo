@@ -4,12 +4,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
 func main() {
 	fmt.Println("Creating web request in go")
-	performGetRequest()
+	// performGetRequest()
+	// performPostRequestWithJSON()
+	performPostRequestWithFormData()
 }
 
 func performGetRequest() {
@@ -36,5 +39,45 @@ func performGetRequest() {
 	fmt.Println("ByteCount is: ", byteCount)
 	fmt.Println(responseString.String())
 	// fmt.Println(contentStr)
+
+}
+
+func performPostRequestWithJSON() {
+	myurl := "http://localhost:8000/post"
+
+	payload := strings.NewReader(`
+		{
+			"name": "Dev",
+			"age": 22
+		}
+	`)
+
+	response, err := http.Post(myurl, "application/json", payload)
+
+	if err != nil {
+		panic(err)
+	}
+	defer response.Body.Close()
+	content, _ := ioutil.ReadAll(response.Body)
+	fmt.Println(string(content))
+
+}
+
+func performPostRequestWithFormData() {
+	myurl := "http://localhost:8000/postform"
+
+	payload := url.Values{}
+	payload.Add("name", "Dev")
+	payload.Add("age", "22")
+	payload.Add("email", "devkahar@go.dev")
+
+	response, err := http.PostForm(myurl, payload)
+
+	if err != nil {
+		panic(err)
+	}
+	defer response.Body.Close()
+	content, _ := ioutil.ReadAll(response.Body)
+	fmt.Println(string(content))
 
 }
