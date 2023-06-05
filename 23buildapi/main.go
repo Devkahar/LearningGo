@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -12,9 +13,9 @@ import (
 )
 
 type Course struct {
-	CouseId     string  `json:"courseid"`
+	CourseId    string  `json:"courseid"`
 	CourseName  string  `json:"cousename"`
-	CoursePrice string  `json:"price"`
+	CoursePrice int     `json:"price"`
 	Author      *Author `json:"author"`
 }
 
@@ -28,11 +29,29 @@ var courses []Course
 
 // Middelware/Helper
 func (c *Course) IsEmpty() bool {
-	// return c.CouseId == "" && c.CourseName == ""
+	// return c.CourseId == "" && c.CourseName == ""
 	return c.CourseName == ""
 }
 
 func main() {
+	// Setup route
+	r := mux.NewRouter()
+
+	// seeding
+	courses = append(courses, Course{CourseId: "1", CourseName: "React JS", CoursePrice: 299, Author: &Author{"Akshay Sani", "namastejs.dev"}})
+	courses = append(courses, Course{CourseId: "2", CourseName: "Node JS", CoursePrice: 399, Author: &Author{"Sheaphen Grider", "udemy.com"}})
+
+	fmt.Println(courses)
+	// Routing
+	r.HandleFunc("/", serveHome).Methods("GET")
+	r.HandleFunc("/courses", getAllCourses).Methods("GET")
+	r.HandleFunc("/course/{id}", getOneCourse).Methods("GET")
+	r.HandleFunc("/course", createOneCourse).Methods("POST")
+	r.HandleFunc("/course/{id}", updateOneCourse).Methods("PUT")
+	r.HandleFunc("/course/{id}", removeOneCourse).Methods("DELETE")
+
+	// Listen to port
+	log.Fatal(http.ListenAndServe(":4000", r))
 
 }
 
@@ -58,7 +77,7 @@ func getOneCourse(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	for _, course := range courses {
-		if course.CouseId == params["id"] {
+		if course.CourseId == params["id"] {
 			json.NewEncoder(w).Encode(course)
 			return
 		}
@@ -86,7 +105,7 @@ func createOneCourse(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rand.Seed(time.Now().UnixNano())
-	course.CouseId = strconv.Itoa(rand.Intn(100))
+	course.CourseId = strconv.Itoa(rand.Intn(100))
 	courses = append(courses, course)
 	json.NewEncoder(w).Encode(course)
 }
@@ -112,7 +131,7 @@ func updateOneCourse(w http.ResponseWriter, r *http.Request) {
 
 	// Find course by id and update it
 	for index, course := range courses {
-		if course.CouseId == params["id"] {
+		if course.CourseId == params["id"] {
 			courses = append(courses, newCourse)
 			courses = append(courses[:index], courses[index+1:]...)
 			json.NewEncoder(w).Encode(newCourse)
@@ -131,7 +150,7 @@ func removeOneCourse(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	for idx, course := range courses {
-		if course.CouseId == params["id"] {
+		if course.CourseId == params["id"] {
 			courses = append(courses[:idx], courses[idx+1:]...)
 			break
 		}
