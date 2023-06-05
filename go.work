@@ -2,4 +2,5 @@ use (
 	./22mymodules
 	./23buildapi
 	./24goroutines
+	./25racecondition
 )
