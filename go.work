@@ -3,4 +3,5 @@ use (
 	./23buildapi
 	./24goroutines
 	./25racecondition
+	./26channels
 )
