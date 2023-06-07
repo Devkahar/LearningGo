@@ -4,4 +4,5 @@ use (
 	./24goroutines
 	./25racecondition
 	./26channels
+	./28go-concurrency-pattern/01generator
 )
