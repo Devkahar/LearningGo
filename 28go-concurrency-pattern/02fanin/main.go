@@ -22,18 +22,34 @@ func main() {
 func fanIn(bob, ana <-chan string) <-chan string {
 	ch := make(chan string)
 
+	// go func() {
+	// 	for {
+	// 		ch <- <-bob
+	// 	}
+	// }()
+	// go func() {
+	// 	for {
+	// 		// Lets say ana take long time to reply
+	// 		time.Sleep(2100 * time.Millisecond)
+	// 		ch <- <-ana
+	// 	}
+	// }()
+
+	// --------------------------------
+	// using select statement for same.
+
 	go func() {
 		for {
-			ch <- <-bob
+			select {
+			case s := <-bob:
+				ch <- s
+			case s := <-ana:
+				time.Sleep(1 * time.Millisecond)
+				ch <- s
+			}
 		}
 	}()
-	go func() {
-		for {
-			// Lets say ana take long time to reply
-			time.Sleep(2100 * time.Millisecond)
-			ch <- <-ana
-		}
-	}()
+
 	return ch
 }
 
