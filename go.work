@@ -10,4 +10,5 @@ use (
 	./28go-concurrency-pattern/04timeout-select
 	./28go-concurrency-pattern/05daisy-chain
 	./29addressbook
+	./30interfaces
 )
