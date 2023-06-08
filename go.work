@@ -7,5 +7,6 @@ use (
 	./28go-concurrency-pattern/01generator
 	./28go-concurrency-pattern/02fanin
 	./28go-concurrency-pattern/03restoringsequence
-	./28go-concurrency-pattern/03timeout-select
+	./28go-concurrency-pattern/04timeout-select
+	./28go-concurrency-pattern/05daisy-chain
 )
