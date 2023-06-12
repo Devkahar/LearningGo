@@ -1,32 +1,22 @@
 package db
 
 import (
-	"database/sql"
-	"os"
+	"addressbook/pkg/model"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 // DB
-// var Contacts []model.Contact
+var DB *gorm.DB
 
-func CreateConnection() *sql.DB {
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic("Fail to load .env file")
-	}
-
-	db, err := sql.Open("postgres", os.Getenv("POSTGRES_URL"))
-
+func CreateConnection() {
+	dsn := "host=localhost user=postgres password=Dev@123 dbname=stocksdb port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
-
-	err = db.Ping()
-
-	if err != nil {
-		panic(err)
-	}
-	return db
+	db.AutoMigrate(&model.Contact{}, &model.Address{}, &model.Name{}, &model.Phone{})
+	DB = db
 }
