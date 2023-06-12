@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/gorilla/mux"
+	"gorm.io/gorm/clause"
 )
 
 // Home Page
@@ -40,13 +40,6 @@ func AddContact(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	// Insert 1000 connection
-	// for i := 0; i < 1000; i++ {
-	// 	err = insertContact(contact)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// }
 	err = insertContact(contact)
 	if err != nil {
 		panic(err)
@@ -94,64 +87,14 @@ func insertContact(contact model.Contact) error {
 	}
 	return nil
 }
-func Delay() {
-	time.Sleep(100 * time.Millisecond)
-}
-func executeAddressQuery(contact *model.Contact, mut *sync.Mutex, wg *sync.WaitGroup) {
-	defer wg.Done()
-	mut.Lock()
-	db.DB.First(&contact.Address, contact.ID)
-	mut.Unlock()
-	Delay()
-}
-func executePhoneQuery(contact *model.Contact, mut *sync.Mutex, wg *sync.WaitGroup) {
-	defer wg.Done()
-	mut.Lock()
-	db.DB.First(&contact.PhoneNumber, contact.ID)
-	mut.Unlock()
-	Delay()
-}
-func executeNameQuery(contact *model.Contact, mut *sync.Mutex, wg *sync.WaitGroup) {
-	defer wg.Done()
-	mut.Lock()
-	db.DB.First(&contact.Name, contact.ID)
-	mut.Unlock()
-	Delay()
-}
 func getContactList() ([]model.Contact, error) {
 	var contacts []model.Contact
 	start := time.Now()
+	err := db.DB.Preload(clause.Associations).Find(&contacts).Error
 
-	var mut = &sync.Mutex{}
-	var wg = &sync.WaitGroup{}
-	err := db.DB.Find(&contacts).Error
-
-	// dbChan := make(chan bool)
 	if err != nil {
 		return contacts, err
 	}
-	// dbChan <- true
-
-	// Without coroutines
-	for idx := range contacts {
-		db.DB.First(&contacts[idx].Address, contacts[idx].ID)
-		Delay()
-		db.DB.First(&contacts[idx].Name, contacts[idx].ID)
-		Delay()
-		db.DB.First(&contacts[idx].PhoneNumber, contacts[idx].ID)
-		Delay()
-	}
-	// Querying DB with coroutines
-
-	for idx := range contacts {
-		wg.Add(1)
-		go executeAddressQuery(&contacts[idx], mut, wg)
-		wg.Add(1)
-		go executeNameQuery(&contacts[idx], mut, wg)
-		wg.Add(1)
-		go executePhoneQuery(&contacts[idx], mut, wg)
-	}
-	wg.Wait()
 	fmt.Println(time.Since(start))
 	return contacts, nil
 }
