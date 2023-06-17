@@ -12,4 +12,7 @@ use (
 	./28go-concurrency-pattern/06workerpool
 	./29addressbook
 	./30interfaces
+	./31context/emmitcancleevent
+	./31context/listerncancelevent
+	./31context/timeoutwithcontext
 )
