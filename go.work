@@ -16,4 +16,5 @@ use (
 	./31context/listerncancelevent
 	./31context/timeoutwithcontext
 	./32generics/01nongenericfunctions
+	./32generics/02genericfunctions
 )
