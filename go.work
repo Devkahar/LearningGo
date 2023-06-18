@@ -15,4 +15,5 @@ use (
 	./31context/emmitcancleevent
 	./31context/listerncancelevent
 	./31context/timeoutwithcontext
+	./32generics/01nongenericfunctions
 )
