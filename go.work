@@ -17,4 +17,5 @@ use (
 	./31context/timeoutwithcontext
 	./32generics/01nongenericfunctions
 	./32generics/02genericfunctions
+	./33fiber-api
 )
