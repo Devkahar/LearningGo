@@ -17,6 +17,5 @@ func main() {
 	db.CreateConnection()
 	r := mux.NewRouter()
 	router.RegisterRoutes(r)
-
 	http.ListenAndServe(":4000", r)
 }

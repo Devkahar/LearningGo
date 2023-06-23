@@ -1,4 +1,5 @@
 use (
+	./21bitmorejson
 	./22mymodules
 	./23buildapi
 	./24goroutines
@@ -18,4 +19,5 @@ use (
 	./32generics/01nongenericfunctions
 	./32generics/02genericfunctions
 	./33fiber-api
+	./34jwtauth
 )

@@ -6,13 +6,14 @@ import (
 
 type Contact struct {
 	gorm.Model
-	ID          uint    `gorm:"primaryKey"`
-	Name        Name    `json:"name" gorm:"foreignKey:ID"`
-	Email       string  `db:"email" json:"email"`
-	PhoneNumber Phone   `json:"phonenumber," gorm:"foreignKey:ID"`
-	DOB         string  `db:"dob" json:"dob"`
-	Address     Address `json:"address" gorm:"foreignKey:ID"`
+	ID          uint     `gorm:"primaryKey"`
+	Name        *Name    `json:"name" gorm:"foreignKey:ID"`
+	Email       string   `db:"email" json:"email"`
+	PhoneNumber *Phone   `json:"phonenumber," gorm:"foreignKey:ID"`
+	DOB         string   `db:"dob" json:"dob"`
+	Address     *Address `json:"address" gorm:"foreignKey:ID"`
 }
+
 type Name struct {
 	gorm.Model
 	ID        uint   `gorm:"primaryKey"`
@@ -36,6 +37,10 @@ type Address struct {
 }
 type Message struct {
 	Str string `json:"message"`
+}
+type HttpError struct {
+	Status  int
+	Message string
 }
 
 func (Contact) TableName() string {
