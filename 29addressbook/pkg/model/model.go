@@ -10,8 +10,8 @@ type Contact struct {
 	Name        *Name    `json:"name" gorm:"foreignKey:ID"`
 	Email       string   `db:"email" json:"email"`
 	PhoneNumber *Phone   `json:"phonenumber," gorm:"foreignKey:ID"`
-	DOB         string   `db:"dob" json:"dob"`
-	Address     *Address `json:"address" gorm:"foreignKey:ID"`
+	DOB         string   `db:"dob" json:"dob" validate:"required"`
+	Address     *Address `json:"address" gorm:"foreignKey:ID" validate:"required"`
 }
 
 type Name struct {
@@ -28,7 +28,6 @@ type Phone struct {
 }
 type Address struct {
 	gorm.Model
-	ID            uint   `gorm:"primaryKey"`
 	Country       string `json:"country"`
 	State         string `json:"state"`
 	City          string `json:"city"`
@@ -38,23 +37,15 @@ type Address struct {
 type Message struct {
 	Str string `json:"message"`
 }
-type HttpError struct {
-	Status  int
-	Message string
+
+type APIResponse struct {
+	Status  int         `json:"status"`
+	Err     error       `json:"error"`
+	Data    interface{} `json:"data"`
+	Message string      `json:"message"`
 }
 
-func (Contact) TableName() string {
-	return "contacts"
-}
-
-func (Name) TableName() string {
-	return "names"
-}
-
-func (Phone) TableName() string {
-	return "phones"
-}
-
-func (Address) TableName() string {
-	return "addresses"
+var ErrorMessages = map[string]string{
+	"Address": "address is required",
+	"DOB":     "date of birth is Required",
 }

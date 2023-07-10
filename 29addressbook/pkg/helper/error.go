@@ -1,16 +1,8 @@
 package helper
 
-import (
-	"addressbook/pkg/model"
-	"encoding/json"
-	"net/http"
-)
+import "addressbook/pkg/model"
 
-func HandelApiError(w http.ResponseWriter, httpErr *model.HttpError) {
-	w.WriteHeader(httpErr.Status)
-	data, err := json.Marshal(httpErr)
-	if err != nil {
-		httpErr.Message = "Someting went wrong"
-	}
-	w.Write([]byte(data))
+func ErrorResponse(r *model.APIResponse, statusCode int, err error) {
+	r.Status = statusCode
+	r.Err = err
 }
