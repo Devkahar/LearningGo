@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -13,11 +14,31 @@ type course struct {
 	Tags     []string `json:"tags,omitempty"`
 }
 
+type ApplicationError struct {
+	error
+}
+
+func (me ApplicationError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(me.Error())
+}
+
 func main() {
 	fmt.Println("Learning how to create json data.")
 	encodeJSON()
 	decodeJSON()
 
+	errList := []error{
+		ApplicationError{errors.New("err 1")},
+		ApplicationError{errors.New("err 2")},
+		ApplicationError{errors.New("err 3")},
+	}
+	jsonData, err := json.MarshalIndent(errList, "", "\t")
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(string(jsonData))
 }
 
 func encodeJSON() {

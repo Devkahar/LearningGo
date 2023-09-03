@@ -13,10 +13,13 @@ import (
 var DB *gorm.DB
 
 func main() {
+	defer func() {
+
+	}()
 	fmt.Println("Address Book Application")
 	db.CreateConnection()
 	r := mux.NewRouter()
 	router.RegisterRoutes(r)
-
 	http.ListenAndServe(":4000", r)
+	panic("OOP error")
 }
